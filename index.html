@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14532d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="めざせ700m">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>めざせ！700m</title>
+<style>
+:root{--green:#166534;--green2:#22c55e;--bg:#f3f7f3;--card:#fff;--ink:#17231a;--muted:#647067;--line:#e3ebe4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+header{background:linear-gradient(135deg,#14532d,#15803d);color:white;padding:24px 18px 22px;border-radius:0 0 24px 24px}
+header small{opacity:.8}h1{font-size:26px;margin:8px 0 4px}header p{margin:0;opacity:.9;font-size:13px}
+main{max-width:620px;margin:auto;padding:14px 14px 36px}.card{background:var(--card);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 3px 14px #17391b0a;border:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat strong{display:block;font-size:28px;margin-top:3px}.muted,.hint{color:var(--muted);font-size:12px}.progress{height:12px;background:#e8eee8;border-radius:99px;overflow:hidden;margin:14px 0 6px}.bar{height:100%;width:75%;background:var(--green2);border-radius:99px}
+h2{font-size:17px;margin:0 0 12px}.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.tab,button{border:0;border-radius:12px;padding:11px 8px;font-weight:700;font-size:13px}.tab{background:#edf3ed;color:#35533a}.tab.active,button.primary{background:var(--green);color:white}
+.day{padding:13px 0;border-top:1px solid var(--line)}.day:first-of-type{border-top:0}.day h3{font-size:15px;margin:0 0 8px}.task{display:flex;gap:9px;align-items:flex-start;margin:9px 0;font-size:14px;line-height:1.45}.task input{width:19px;height:19px;accent-color:var(--green);flex-shrink:0;margin:0}
+label{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}input[type=number],textarea{width:100%;border:1px solid #d7e1d8;border-radius:11px;padding:12px;font:inherit;background:white}textarea{min-height:72px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap}button{cursor:pointer}.secondary{background:#edf3ed;color:#25472c}.record{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}.record:last-child{border:0}.notice{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:12px;font-size:13px;line-height:1.55}.foot{text-align:center;color:var(--muted);font-size:11px;padding:12px}
+</style>
+</head>
+<body>
+<header><small>親子ランニング・大会準備</small><h1>めざせ！700m 🏃</h1><p>4分間走｜12月10日 大会チャレンジ</p></header>
+<main>
+<section class="card">
+ <div class="stats"><div class="stat"><span class="muted">現在の記録</span><strong id="current">525m</strong><span class="muted">約1周半</span></div><div class="stat"><span class="muted">目標</span><strong>700m</strong><span class="muted">350mコースを2周</span></div></div>
+ <div class="progress"><div class="bar" id="progress"></div></div><div class="muted" id="progressText">目標まであと175m・達成率75%</div>
+</section>
+<section class="card">
+ <h2>練習メニュー</h2>
+ <div class="tabs" id="tabs">
+  <button class="tab active" data-week="0">1週目</button><button class="tab" data-week="1">2週目</button><button class="tab" data-week="2">3週目</button><button class="tab" data-week="3">4週目</button>
+ </div>
+ <p class="muted" id="weekMeta">11/14・11/15｜走る習慣づくり</p>
+ <div class="day"><h3>土曜日｜基礎・体力づくり</h3><div id="satTasks"></div><label class="task"><input type="checkbox" id="satDone">土曜日の練習完了！</label></div>
+ <div class="day"><h3>日曜日｜4分間走・実践</h3><div id="sunTasks"></div><label class="task"><input type="checkbox" id="sunDone">日曜日の練習完了！</label></div>
+ <div class="notice" id="tip"></div>
+</section>
+<section class="card">
+ <h2>4分間走の記録</h2>
+ <label for="distance">走行距離（m）</label><input id="distance" type="number" min="0" max="5000" inputmode="numeric" placeholder="例：550">
+ <label for="memo">今日の感想・頑張ったこと</label><textarea id="memo" placeholder="例：最後まで歩かずに走れた！"></textarea>
+ <div class="actions" style="margin-top:12px"><button class="primary" id="save">記録を保存</button><button class="secondary" id="clear">入力をクリア</button></div>
+ <p class="hint">記録とチェック内容はこのiPhoneのブラウザ内に保存されます。</p>
+</section>
+<section class="card">
+ <h2>これまでの記録</h2><div id="records"></div>
+</section>
+<section class="card">
+ <h2>大会までの確認</h2>
+ <div class="record"><span>12/7（月）</span><b>休養</b></div><div class="record"><span>12/8（火）</span><b>軽い散歩・ストレッチ</b></div><div class="record"><span>12/9（水）</span><b>休養・早めに就寝</b></div><div class="record"><span>12/10（木）</span><b style="color:#166534">大会本番！700mチャレンジ</b></div>
+ <p class="hint">体調や疲れに合わせて休みましょう。痛み、めまい、強い息苦しさがあれば運動を中止してください。</p>
+</section>
+<div class="foot">めざせ！700m｜自分用ランニング記録アプリ</div>
+</main>
+<script>
+const plans=[
+ {meta:"11/14・11/15｜走る習慣づくり",sat:["ウォーキング・軽いジョギング 5分","1分走る＋1分歩く × 3セット","ゆっくり歩いて終了"],sun:["ウォーミングアップ 5分","4分間走 × 1回（現状525mを確認）","クールダウン 3〜5分"],goal:"525m前後",tip:"まずは楽しく走ること。無理に記録を伸ばさなくてOK。"},
+ {meta:"11/21・11/22｜持久力アップ",sat:["ウォーミングアップ 5分","1分30秒走る＋1分歩く × 3セット","クールダウン"],sun:["ウォーミングアップ 5分","4分間走 × 1回","後半も同じリズムを意識"],goal:"550〜575m",tip:"最初に飛ばしすぎず、最後まで同じリズムで。"},
+ {meta:"11/28・11/29｜大会前の実践練習",sat:["ウォーミングアップ 5分","30秒少し速く＋90秒ゆっくり × 3セット","クールダウン"],sun:["ウォーミングアップ 5分","4分間走 × 1回","余裕があれば最後の1分だけ少しペースアップ"],goal:"600〜650m",tip:"距離よりも最後まで走り切ることを優先。"},
+ {meta:"12/5・12/6｜疲労を抜く調整週",sat:["ウォーキング 5分","軽いジョギング 5分","15秒程度の軽いスピードアップ × 2回"],sun:["ウォーキング 5分","軽いジョギング 3分","余裕のあるペースで1〜2分走る","クールダウン"],goal:"記録測定なし",tip:"頑張らないことが大切。大会に疲れを残さない。"}
+];
+let week=0;let data=JSON.parse(localStorage.getItem("run700")||'{"records":[null,null,null,null],"checks":{}}');
+const $=id=>document.getElementById(id);
+function persist(){localStorage.setItem("run700",JSON.stringify(data))}
+function tasks(id,arr){$(id).innerHTML=arr.map((t,i)=>`<label class="task"><input type="checkbox" data-task="${id}-${i}">${t}</label>`).join("");$(id).querySelectorAll("input").forEach(el=>{el.checked=!!data.checks[el.dataset.task];el.addEventListener("change",()=>{data.checks[el.dataset.task]=el.checked;persist()})})}
+function render(){let p=plans[week];$("weekMeta").textContent=p.meta+"｜日曜目安："+p.goal;$("tip").textContent="今週のポイント："+p.tip;tasks("satTasks",p.sat);tasks("sunTasks",p.sun);$("satDone").checked=!!data.checks["satDone-"+week];$("sunDone").checked=!!data.checks["sunDone-"+week];$("satDone").onchange=e=>{data.checks["satDone-"+week]=e.target.checked;persist()};$("sunDone").onchange=e=>{data.checks["sunDone-"+week]=e.target.checked;persist()};document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",+b.dataset.week===week));let vals=data.records.filter(Boolean);let latest=vals.length?Number(vals[vals.length-1].distance):525;$("current").textContent=latest+"m";let pct=Math.min(100,latest/700*100);$("progress").style.width=pct+"%";$("progressText").textContent=`目標まであと${Math.max(0,700-latest)}m・達成率${Math.round(pct)}%`;$("records").innerHTML=plans.map((p,i)=>`<div class="record"><span>第${i+1}週</span><b>${data.records[i]?data.records[i].distance+"m":"未記録"}</b></div>`).join("")}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{week=+b.dataset.week;render()}));
+$("save").addEventListener("click",()=>{let n=Number($("distance").value);if(!n||n<1){alert("距離を入力してください。");return}data.records[week]={distance:n,memo:$("memo").value};persist();render();alert("記録を保存しました！")});
+$("clear").addEventListener("click",()=>{$("distance").value="";$("memo").value=""});
+render();
+if("serviceWorker" in navigator && location.protocol.startsWith("http"))navigator.serviceWorker.register("./sw.js").catch(()=>{});
+</script>
+</body></html>
